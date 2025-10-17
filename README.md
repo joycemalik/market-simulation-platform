@@ -1,33 +1,42 @@
 # Market Simulation Platform
-A web-based market simulation platform that allows users to simulate buying and selling stocks in a virtual environment. It displays real-time (simulated) stock prices, manages a user portfolio, and keeps a transaction history.
+
+A minimalist web-based market simulation platform allowing users to simulate buying and selling stocks in a virtual environment. It displays real-time (simulated) stock prices, a user's portfolio, and a transaction history. The entire application is contained within a single HTML file, utilizing only HTML and vanilla JavaScript.
 
 ## How to Use
 
-1.  **Save the file:** Save the provided `index.html` content as `index.html` on your computer.
-2.  **Open in Browser:** Double-click `index.html` or drag it into your web browser (e.g., Chrome, Firefox, Safari).
-3.  **View Market Prices:** The "Market Prices" section will display a list of simulated stocks with their current prices and recent changes. Prices update automatically every 5 seconds.
-4.  **Manage Your Portfolio:** The "Your Portfolio" section shows your current cash balance and any stocks you currently own, along with their average purchase price, current value, and profit/loss.
-5.  **Trade Stocks:**
-    *   Enter a stock **Symbol** (e.g., `AAPL`, `GOOG`) in the "Trade Stocks" section. A datalist helps with available symbols.
-    *   Enter the **Quantity** of shares you wish to trade.
-    *   Click the **Buy** button to purchase shares or the **Sell** button to sell shares.
-    *   Transactions require sufficient cash for buying or sufficient shares in your portfolio for selling.
-6.  **View Transaction History:** All your successful buy and sell orders are recorded in the "Transaction History" section.
-7.  **Persistence:** Your portfolio, cash balance, and transaction history are automatically saved in your browser's local storage, so your data will persist even if you close and reopen the page.
+1.  **Save the file:** Save the provided `index.html` content into a file named `index.html` on your local machine.
+2.  **Open in browser:** Open the `index.html` file using any modern web browser (e.g., Chrome, Firefox, Safari).
+3.  **Observe:** The platform will immediately start displaying simulated stock prices that update every few seconds. Your initial balance is $10,000.
+4.  **Trade Stocks:**
+    *   In the "Trade Stocks" section, enter a stock symbol (e.g., `AAPL`, `GOOG`, `MSFT`) and the quantity you wish to buy or sell. A datalist provides suggestions for available symbols.
+    *   Click "Buy" to purchase shares or "Sell" to liquidate shares.
+    *   Watch your balance, portfolio, and transaction history update in real-time.
+5.  **Explore:** View your current stock holdings in "Your Portfolio" and review past trades in "Transaction History".
 
 ## Code Explanation
 
-This project is a single-file web application (`index.html`) utilizing only HTML, CSS, and vanilla JavaScript.
+This single-file application is built with a focus on simplicity and direct DOM manipulation using vanilla JavaScript.
 
-*   **HTML Structure:** Defines the layout with sections for market prices, user portfolio, trading interface, and transaction history, using semantic HTML5 elements.
-*   **Inline CSS:** Provides basic, minimalist styling to create a clean and readable user interface without external stylesheets. It uses CSS Grid for the main layout and basic typography.
-*   **Vanilla JavaScript:**
-    *   **Data Management:** `stocks`, `portfolio`, and `transactions` arrays/objects store the application's state.
-    *   **Price Simulation:** The `updateStockPrices` function, called via `setInterval`, simulates real-time market fluctuations by randomly adjusting stock prices. It calculates and displays the price change since the last render.
-    *   **UI Rendering:** Functions like `renderStocks`, `renderPortfolio`, and `renderTransactions` dynamically update the HTML content based on the current data state.
-    *   **Trading Logic:** The `executeTrade` function handles the logic for buying and selling stocks, including cash balance updates, portfolio adjustments (average cost calculation), and recording transactions. It includes basic validation (e.g., sufficient funds/shares).
-    *   **Persistence:** `localStorage` is used to save and load the `portfolio`, `transactions`, and current `stocks` prices, ensuring user data is retained across browser sessions. The `lastRenderedPrice` property is excluded from storage to avoid bloating and ensure fresh change calculations on load.
-    *   **Event Handling:** Event listeners are attached to buttons to trigger trade actions.
+*   **HTML Structure:**
+    *   The `index.html` file sets up the basic layout with sections for:
+        *   User Balance
+        *   Live Stock Prices (displayed in a table)
+        *   User Portfolio (displayed in a table)
+        *   Trading Controls (input fields for symbol and quantity, Buy/Sell buttons)
+        *   Transaction History (displayed in a table)
+    *   Basic CSS is embedded in the `<style>` tag to provide a clean and readable user interface.
+*   **JavaScript Logic (embedded in `<script>` tag):**
+    *   **Data Models:** Global variables (`userBalance`, `portfolio`, `transactions`, `stocks`) store the application's state. `stocks` includes symbol, name, current price, and a `volatility` factor for simulation.
+    *   **`init()` function:** This is the entry point, called when the page loads. It renders the initial state and sets up a `setInterval` to continuously update stock prices.
+    *   **`updateStockPrices()`:** This function simulates market movement. Every 3 seconds, it iterates through the `stocks` array, applying a random percentage change (based on its `volatility`) to each stock's price. It then triggers `renderStocks()` and `renderPortfolio()` to update the UI.
+    *   **`render...()` functions:** A set of functions (`renderBalance`, `renderStocks`, `renderPortfolio`, `renderTransactionHistory`) are responsible for dynamically updating specific parts of the HTML document by manipulating table rows and cell contents based on the current JavaScript data models.
+    *   **`handleTrade(type)`:** This function is triggered by the Buy/Sell buttons.
+        *   It reads the stock symbol and quantity from the input fields.
+        *   It validates the input and checks for sufficient funds (for buying) or shares (for selling).
+        *   If the trade is valid, it updates `userBalance`, `portfolio`, and adds a new entry to the `transactions` array.
+        *   It then calls `renderAll()` to refresh all parts of the UI.
+    *   **Helper Functions:** `formatCurrency` for consistent number formatting and `showMessage` for user feedback.
+    *   **Datalist:** The `availableSymbols` datalist dynamically populates options from the `stocks` array, providing an auto-completion feature for the trade symbol input.
 
 ## License
 
